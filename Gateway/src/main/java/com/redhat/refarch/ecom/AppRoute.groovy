@@ -20,6 +20,7 @@ import com.redhat.refarch.ecom.model.Order
 import com.redhat.refarch.ecom.model.OrderItem
 import com.redhat.refarch.ecom.model.Product
 import com.redhat.refarch.ecom.model.Result
+import com.redhat.refarch.ecom.model.Transaction
 import org.apache.camel.model.rest.RestParamType
 import org.apache.camel.spring.SpringRouteBuilder
 import org.springframework.stereotype.Component
@@ -37,14 +38,18 @@ class AppRoute extends SpringRouteBuilder {
                 .host("0.0.0.0")
                 .port(9091)
                 .apiContextPath("/api-doc")
-                .apiProperty("api.title", "API Gateway").apiProperty("api.version", "1.0")
+                .apiProperty("api.title", "E-Commerce API Gateway")
+                .apiProperty("api.version", "1.0")
+                .apiProperty("api.description", "Serving downstream product, sales, billing and fulfillment services")
                 .apiProperty("cors", "true")
+                .apiProperty("api.license", "MIT License (MIT)")
+                .apiProperty("api.licenseUrl", "https://opensource.org/licenses/MIT")
 
         rest("/billing/process").description("billing processing & warehouse fulfillment")
                 .consumes(MediaType.APPLICATION_JSON).produces(MediaType.APPLICATION_JSON)
-                .post()
+                .post().type(Transaction.class)
                     .description("process transaction").outType(Result.class)
-                    .param().name("transaction").type(RestParamType.body)
+                    .param().name("transaction").type(RestParamType.body).dataType("Transaction")
                     .description("transaction to be processed").endParam()
                     .responseMessage().code(200).message("billing complete, forking to fulfillment")
                 .endResponseMessage()

@@ -16,8 +16,11 @@
 package com.redhat.refarch.ecom
 
 import org.apache.camel.CamelContext
+import org.apache.camel.component.metrics.routepolicy.MetricsRoutePolicyFactory
+import org.apache.camel.processor.interceptor.Tracer
 import org.apache.camel.spring.boot.CamelContextConfiguration
 import org.apache.camel.spring.javaconfig.CamelConfiguration
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -29,17 +32,22 @@ import org.springframework.context.annotation.Configuration
 @ComponentScan("com.redhat.refarch.ecom")
 class CamelConfig extends CamelConfiguration {
 
+    @Value('${logging.trace.enabled:true}')
+    private Boolean tracingEnabled
+
+    @Override
+    protected void setupCamelContext(CamelContext camelContext) throws Exception {
+        camelContext.tracing = tracingEnabled
+        camelContext.addRoutePolicyFactory(new MetricsRoutePolicyFactory())
+        super.setupCamelContext(camelContext)
+    }
+
     @Bean
-    CamelContextConfiguration contextConfiguration() {
-        return new CamelContextConfiguration() {
-
-            @Override
-            void beforeApplicationStart(CamelContext context) {
-                context.setTracing(true)
-            }
-
-            @Override
-            void afterApplicationStart(CamelContext context) {}
-        }
+    Tracer camelTracer() {
+        Tracer tracer = new Tracer()
+        tracer.traceExceptions = false
+        tracer.traceInterceptors = true
+        tracer.logName = "com.redhat.refarch.ecom.api.trace"
+        return tracer
     }
 }
