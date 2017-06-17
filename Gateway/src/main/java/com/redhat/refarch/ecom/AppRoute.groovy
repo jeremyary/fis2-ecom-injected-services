@@ -15,12 +15,7 @@
  */
 package com.redhat.refarch.ecom
 
-import com.redhat.refarch.ecom.model.Customer
-import com.redhat.refarch.ecom.model.Order
-import com.redhat.refarch.ecom.model.OrderItem
-import com.redhat.refarch.ecom.model.Product
-import com.redhat.refarch.ecom.model.Result
-import com.redhat.refarch.ecom.model.Transaction
+import com.redhat.refarch.ecom.model.*
 import org.apache.camel.model.rest.RestParamType
 import org.apache.camel.spring.SpringRouteBuilder
 import org.springframework.stereotype.Component
@@ -73,15 +68,21 @@ class AppRoute extends SpringRouteBuilder {
 
         rest("/customers").description("customers endpoint")
                 .consumes(MediaType.APPLICATION_JSON).produces(MediaType.APPLICATION_JSON)
-                .put()
+                .post()
                     .description("save new customer").outType(Customer.class)
                     .param().name("customer").type(RestParamType.body)
                     .description("customer to save").endParam()
                     .responseMessage().code(200).message("new customer saved").endResponseMessage()
                     .to("amq:customers.save?transferException=true")
+                .put()
+                    .description("update customer").outType(Customer.class)
+                    .param().name("customer").type(RestParamType.body)
+                    .description("customer to update").endParam()
+                    .responseMessage().code(200).message("customer updated").endResponseMessage()
+                    .to("amq:customers.save?transferException=true")
 
                 .patch()
-                    .description("update customer").outType(Customer.class)
+                    .description("partial update customer").outType(Customer.class)
                     .param().name("customer").type(RestParamType.body)
                     .description("customer to update").endParam()
                     .responseMessage().code(200).message("customer updated").endResponseMessage()
@@ -120,7 +121,7 @@ class AppRoute extends SpringRouteBuilder {
                     .description("id of customer to fetch orders from").endParam()
                     .responseMessage().code(200).message("customer's orders fetched").endResponseMessage()
                     .to("amq:customers.orders.list?transferException=true")
-                .put()
+                .post()
                     .description("save new customer order").outType(Order.class)
                     .param().name("customerId").type(RestParamType.path)
                     .description("id of customer to own order").endParam()
@@ -128,13 +129,21 @@ class AppRoute extends SpringRouteBuilder {
                     .description("order to save").endParam()
                     .responseMessage().code(200).message("new customer order saved").endResponseMessage()
                     .to("amq:customers.orders.save?transferException=true")
+                .put()
+                    .description("update customer order").outType(Order.class)
+                    .param().name("customerId").type(RestParamType.path)
+                    .description("id of customer to own order").endParam()
+                    .param().name("order").type(RestParamType.body)
+                    .description("order to update").endParam()
+                    .responseMessage().code(200).message("customer order updated").endResponseMessage()
+                    .to("amq:customers.orders.save?transferException=true")
 
                 .patch()
-                    .description("save customer order").outType(Order.class)
+                    .description("partial update customer order").outType(Order.class)
                     .param().name("customerId").type(RestParamType.path)
                     .description("id of customer owning order").endParam()
                     .param().name("order").type(RestParamType.body)
-                    .description("order to save").endParam()
+                    .description("order to update").endParam()
                     .responseMessage().code(200).message("customer order updated").endResponseMessage()
                     .to("amq:customers.orders.save?transferException=true")
 
@@ -168,8 +177,7 @@ class AppRoute extends SpringRouteBuilder {
                     .description("id of order").endParam()
                     .responseMessage().code(200).message("order items fetched").endResponseMessage()
                     .to("amq:customers.orders.orderItems.list?transferException=true")
-
-                .put()
+                .post()
                     .description("save new order item").outTypeList(OrderItem.class)
                     .param().name("customerId").type(RestParamType.path)
                     .description("id of customer owning order").endParam()
@@ -179,8 +187,7 @@ class AppRoute extends SpringRouteBuilder {
                     .description("orderItem to save").endParam()
                     .responseMessage().code(200).message("new order item saved").endResponseMessage()
                     .to("amq:customers.orders.orderItems.save?transferException=true")
-
-                .patch()
+                .put()
                     .description("update order item").outTypeList(OrderItem.class)
                     .param().name("customerId").type(RestParamType.path)
                     .description("id of customer owning order").endParam()
@@ -190,7 +197,16 @@ class AppRoute extends SpringRouteBuilder {
                     .description("orderItem to update").endParam()
                     .responseMessage().code(200).message("order item updated").endResponseMessage()
                     .to("amq:customers.orders.orderItems.save?transferException=true")
-
+                .patch()
+                    .description("partial update order item").outTypeList(OrderItem.class)
+                    .param().name("customerId").type(RestParamType.path)
+                    .description("id of customer owning order").endParam()
+                    .param().name("orderId").type(RestParamType.path)
+                    .description("id of order").endParam()
+                    .param().name("orderItem").type(RestParamType.body)
+                    .description("orderItem to update").endParam()
+                    .responseMessage().code(200).message("order item updated").endResponseMessage()
+                    .to("amq:customers.orders.orderItems.save?transferException=true")
 
         rest("/customers/{customerId}/orders/{orderId}/orderItems/{orderItemId}")
                 .description("individual order item endpoint")
@@ -223,16 +239,20 @@ class AppRoute extends SpringRouteBuilder {
                     .description("list featured products").outTypeList(Product.class)
                     .responseMessage().code(200).message("featured products fetched").endResponseMessage()
                     .to("amq:products.list.featured?transferException=true")
-
-                .put()
+                .post()
                     .description("save new product").outType(Product.class)
                     .param().name("product").type(RestParamType.body)
                     .description("product to save").endParam()
                     .responseMessage().code(200).message("new product saved").endResponseMessage()
                     .to("amq:products.save?transferException=true")
-
-                .patch()
+                .put()
                     .description("update product").outType(Product.class)
+                    .param().name("product").type(RestParamType.body)
+                    .description("product to update").endParam()
+                    .responseMessage().code(200).message("product updated").endResponseMessage()
+                    .to("amq:products.save?transferException=true")
+                .patch()
+                    .description("partial update product").outType(Product.class)
                     .param().name("product").type(RestParamType.body)
                     .description("product to update").endParam()
                     .responseMessage().code(200).message("product updated").endResponseMessage()
@@ -246,7 +266,6 @@ class AppRoute extends SpringRouteBuilder {
                     .description("sku of product to fetch").endParam()
                     .responseMessage().code(200).message("product fetched").endResponseMessage()
                     .to("amq:products.get?transferException=true")
-
                 .delete()
                     .description("delete product")
                     .param().name("sku").type(RestParamType.path)
@@ -284,13 +303,13 @@ class AppRoute extends SpringRouteBuilder {
                     .responseMessage().code(200).message("products with keyword fetched").endResponseMessage()
                     .to("amq:products.list.keyword?transferException=true")
 
-        rest("demo/reset")
+        rest("/demo/reset")
                 .get()
                     .description("reset demo dataset - removes all customers/orders, builds basic product set")
                     .responseMessage().code(200).message("demo dataset reset").endResponseMessage()
                     .to("amq:admin.reset?transferException=true")
 
-        rest("demo/testApi")
+        rest("/demo/testApi")
                 .get().to("amq:admin.testApi?transferException=true")
     }
 }
