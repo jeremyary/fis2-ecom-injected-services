@@ -695,7 +695,7 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
-    - name: jolokia
+    - name: 8081-tcp
       port: 8081
       protocol: TCP
       targetPort: 8081
