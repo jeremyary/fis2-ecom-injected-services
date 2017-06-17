@@ -1122,7 +1122,7 @@ parameters:
   - name: IS_PULL_NAMESPACE
     value: openshift
   - name: GIT_URL
-    value: https://github.com/jeremyary/fis2-ecom-services.git
+    value: https://github.com/jeremyary/fis2-ecom-injected-services.git
   - name: APPLICATION_NAME
     description: Application Name
     value: broker
