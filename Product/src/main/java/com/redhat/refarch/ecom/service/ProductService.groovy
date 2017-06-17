@@ -20,6 +20,10 @@ class ProductService {
         return productRepository.findByKeywords(keyword)
     }
 
+    List<Product> list() {
+        return productRepository.findAll()
+    }
+
     List<Product> findFeatured() {
         return productRepository.findByIsFeatured(true)
     }
