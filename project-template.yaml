@@ -245,7 +245,6 @@ objects:
     annotations:
       description: The broker's AMQP port.
       openshift.io/generated-by: OpenShiftNewApp
-      service.alpha.openshift.io/dependencies: '[{"name":"broker-amq-stomp","namespace":"","kind":"Service"},{"name":"broker-amq-mqtt","namespace":"","kind":"Service"},{"name":"broker-amq-tcp","namespace":"","kind":"Service"}]'
     creationTimestamp: null
     labels:
       app: amq62-basic
@@ -267,6 +266,10 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
+    annotations:
+      description: The broker's ingress service.
+      openshift.io/generated-by: OpenShiftNewApp
+      service.alpha.openshift.io/dependencies: '[{"name":"broker-amq-amqp","namespace":"","kind":"Service"},{"name":"broker-amq-stomp","namespace":"","kind":"Service"},{"name":"broker-amq-mqtt","namespace":"","kind":"Service"},{"name":"broker-amq-tcp","namespace":"","kind":"Service"}]'
     labels:
       app: amq62-basic
       template: amq62-basic
@@ -541,6 +544,7 @@ objects:
             name: jolokia
             protocol: TCP
           - containerPort: 8081
+            name: health
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -564,7 +568,7 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
-    - name: 8081-tcp
+    - name: health
       port: 8081
       protocol: TCP
       targetPort: 8081
@@ -672,6 +676,7 @@ objects:
             name: jolokia
             protocol: TCP
           - containerPort: 8081
+            name: health
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -695,7 +700,7 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
-    - name: 8081-tcp
+    - name: health
       port: 8081
       protocol: TCP
       targetPort: 8081
@@ -803,7 +808,7 @@ objects:
             name: jolokia
             protocol: TCP
           - containerPort: 8081
-            name: 8081-tcp
+            name: health
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -827,7 +832,7 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
-    - name: 8081-tcp
+    - name: health
       port: 8081
       protocol: TCP
       targetPort: 8081
@@ -1080,6 +1085,7 @@ objects:
             name: jolokia
             protocol: TCP
           - containerPort: 8081
+            name: health
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -1103,7 +1109,7 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
-    - name: 8081-tcp
+    - name: health
       port: 8081
       protocol: TCP
       targetPort: 8081
@@ -1211,6 +1217,7 @@ objects:
             name: jolokia
             protocol: TCP
           - containerPort: 8081
+            name: health
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -1234,7 +1241,7 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
-    - name: 8081-tcp
+    - name: health
       port: 8081
       protocol: TCP
       targetPort: 8081
