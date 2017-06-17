@@ -565,9 +565,9 @@ objects:
       protocol: TCP
       targetPort: 8778
     - name: 8081-tcp
-          port: 8081
-          protocol: TCP
-          targetPort: 8081
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
     selector:
       app: product-service
       deploymentconfig: product-service
