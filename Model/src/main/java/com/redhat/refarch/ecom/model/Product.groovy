@@ -21,11 +21,13 @@ class Product {
     BigDecimal price
     String image
     List<String> keywords = []
+    List<String> taglines = []
 
     Product() {}
 
     Product(String sku, String name, String description, Double length, Double width, Double height, Double weight,
-            Boolean isFeatured, Integer availability, BigDecimal price, String image, List<String> keywords) {
+            Boolean isFeatured, Integer availability, BigDecimal price, String image, List<String> keywords,
+            List<String> taglines) {
         this.sku = sku
         this.name = name
         this.description = description
@@ -38,13 +40,14 @@ class Product {
         this.price = price
         this.image = image
         this.keywords = keywords
+        this.taglines = taglines
     }
 
     @Override
     String toString() {
         return "Product{sku='${sku}', name='${name}', description='${description}', length=${length}, " +
                 "width=${width}, height=${height}, weight=${weight}, isFeatured=${isFeatured}, " +
-                "availability=${availability}, price=${price}, image='${image}', keywords=${keywords}}"
+                "availability=${availability}, price=${price}, image='${image}', keywords=${keywords}, taglines=${taglines}"
     }
 
 
@@ -62,6 +65,7 @@ class Product {
         BigDecimal price
         String image
         List<String> keywords = []
+        List<String> taglines = []
 
         ProductBuilder sku(String sku) {
             this.sku = sku
@@ -123,9 +127,14 @@ class Product {
             return this
         }
 
+        ProductBuilder taglines(List<String> taglines) {
+            this.taglines = taglines
+            return this
+        }
+
         Product build() {
             return new Product(sku, name, description, length, width, height, weight, isFeatured, availability, price,
-                    image, keywords)
+                    image, keywords, taglines)
         }
     }
 }
