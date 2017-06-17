@@ -517,12 +517,30 @@ objects:
           - name: ACTIVEMQ_SERVICE_PORT
             value: "61616"
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
           name: product-service
           ports:
           - containerPort: 8778
             name: jolokia
             protocol: TCP
-          - containerPort: 9091
+          - containerPort: 8081
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -546,6 +564,10 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
+    - name: 8081-tcp
+          port: 8081
+          protocol: TCP
+          targetPort: 8081
     selector:
       app: product-service
       deploymentconfig: product-service
@@ -626,12 +648,30 @@ objects:
           - name: ACTIVEMQ_SERVICE_PORT
             value: "61616"
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
           name: sales-service
           ports:
           - containerPort: 8778
             name: jolokia
             protocol: TCP
-          - containerPort: 9091
+          - containerPort: 8081
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -655,6 +695,10 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
+    - name: jolokia
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
     selector:
       app: sales-service
       deploymentconfig: sales-service
@@ -735,12 +779,31 @@ objects:
           - name: ACTIVEMQ_SERVICE_PORT
             value: "61616"
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
           name: billing-service
           ports:
           - containerPort: 8778
             name: jolokia
             protocol: TCP
-          - containerPort: 9091
+          - containerPort: 8081
+            name: 8081-tcp
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -764,6 +827,10 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
+    - name: 8081-tcp
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
     selector:
       app: billing-service
       deploymentconfig: billing-service
@@ -844,6 +911,22 @@ objects:
           - name: ACTIVEMQ_SERVICE_PORT
             value: "61616"
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 9091
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 9091
+            timeoutSeconds: 1
           name: gateway-service
           ports:
           - containerPort: 8778
@@ -973,12 +1056,30 @@ objects:
           - name: ACTIVEMQ_SERVICE_PORT
             value: "61616"
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
           name: warehouse-service
           ports:
           - containerPort: 8778
             name: jolokia
             protocol: TCP
-          - containerPort: 9091
+          - containerPort: 8081
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -1002,6 +1103,10 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
+    - name: 8081-tcp
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
     selector:
       app: warehouse-service
       deploymentconfig: warehouse-service
@@ -1082,12 +1187,30 @@ objects:
           - name: ACTIVEMQ_SERVICE_PORT
             value: "61616"
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            httpGet:
+              path: /health
+              port: 8081
+            timeoutSeconds: 1
           name: admin-service
           ports:
           - containerPort: 8778
             name: jolokia
             protocol: TCP
-          - containerPort: 9091
+          - containerPort: 8081
             protocol: TCP
     triggers:
     - type: ConfigChange
@@ -1111,6 +1234,10 @@ objects:
       port: 8778
       protocol: TCP
       targetPort: 8778
+    - name: 8081-tcp
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
     selector:
       app: admin-service
       deploymentconfig: admin-service
