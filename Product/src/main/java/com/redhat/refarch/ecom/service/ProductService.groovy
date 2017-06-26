@@ -37,7 +37,7 @@ class ProductService {
         productRepository.delete(sku)
     }
 
-    void reduceInventory(List<OrderItem> orderItems) {
+    void reduceInventory(OrderItem[] orderItems) {
 
         for (OrderItem orderItem : orderItems) {
 

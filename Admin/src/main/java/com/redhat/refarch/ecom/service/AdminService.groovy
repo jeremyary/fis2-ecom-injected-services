@@ -181,7 +181,7 @@ class AdminService {
         // reduce product
         OrderItem item1 = new OrderItem()
         item1.sku = product.sku
-        item1.sku = 2
+        item1.quantity = 2
         List<OrderItem> orderItems = new ArrayList<OrderItem>(){{ item1 }}
         uri("products", "reduction")
         response = doSilentPost(orderItems)

@@ -15,6 +15,7 @@
  */
 package com.redhat.refarch.ecom
 
+import com.redhat.refarch.ecom.model.OrderItem
 import com.redhat.refarch.ecom.model.Product
 import com.redhat.refarch.ecom.service.ProductService
 import org.apache.camel.model.dataformat.JsonLibrary
@@ -48,7 +49,7 @@ class AppRoute extends SpringRouteBuilder {
                 .marshal().json(JsonLibrary.Jackson)
 
         from("amq:products.save")
-                .unmarshal().json(JsonLibrary.Jackson, Product.class)
+                .unmarshal().json(JsonLibrary.Jackson, OrderItem[].class)
                 .bean(productService, "saveProduct")
                 .marshal().json(JsonLibrary.Jackson)
 
