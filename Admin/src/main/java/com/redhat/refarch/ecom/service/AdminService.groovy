@@ -334,6 +334,7 @@ class AdminService {
         response = doSilentGet()
         Assert.assertTrue(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 
+        resetData()
         println ">>>>> TESTS COMPLETE: API tests successful <<<<<"
     }
 
