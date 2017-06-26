@@ -58,7 +58,7 @@ class AppRoute extends SpringRouteBuilder {
 
         from("amq:products.reduce")
                 .unmarshal().json(JsonLibrary.Jackson, OrderItem[].class)
-                .bean(productService, 'reduceInventory(${header.sku}, ${header.quantity})')
+                .bean(productService, 'reduceInventory')
 
         from("amq:products.keywords.add")
                 .unmarshal().json(JsonLibrary.Jackson, String[].class)
