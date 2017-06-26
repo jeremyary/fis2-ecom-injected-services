@@ -208,11 +208,18 @@ class AdminService {
         Assert.assertNotNull(product)
         Assert.assertTrue(product.description == "foo")
 
-        // list featured products
+        // list products
         uri("products")
         List<Product> products = doGetList(Product[].class)
         Assert.assertTrue(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-        Assert.assertThat(products, IsIterableContainingInOrder.contains(
+        Assert.assertThat(products, IsIterableContainingInAnyOrder.containsInAnyOrder(
+                productRepository.findAll().toArray()))
+
+        // list featured products
+        uri("products", "featured")
+        products = doGetList(Product[].class)
+        Assert.assertTrue(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+        Assert.assertThat(products, IsIterableContainingInAnyOrder.containsInAnyOrder(
                 productRepository.findByIsFeatured(true).toArray()))
 
         // list products by keyword
