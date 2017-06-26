@@ -4,7 +4,7 @@ import groovy.transform.EqualsAndHashCode
 import org.springframework.data.annotation.Id
 
 @EqualsAndHashCode
-class OrderItem {
+class OrderItem implements Serializable {
 
     @Id
     String id
