@@ -49,7 +49,7 @@ class AppRoute extends SpringRouteBuilder {
                 .marshal().json(JsonLibrary.Jackson)
 
         from("amq:products.save")
-                .unmarshal().json(JsonLibrary.Jackson, OrderItem[].class)
+                .unmarshal().json(JsonLibrary.Jackson, Product.class)
                 .bean(productService, "saveProduct")
                 .marshal().json(JsonLibrary.Jackson)
 
@@ -57,6 +57,7 @@ class AppRoute extends SpringRouteBuilder {
                 .bean(productService, 'deleteProduct(${header.sku})')
 
         from("amq:products.reduce")
+                .unmarshal().json(JsonLibrary.Jackson, OrderItem[].class)
                 .bean(productService, 'reduceInventory(${header.sku}, ${header.quantity})')
 
         from("amq:products.keywords.add")

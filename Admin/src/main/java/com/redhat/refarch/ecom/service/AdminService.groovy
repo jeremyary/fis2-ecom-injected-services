@@ -182,9 +182,8 @@ class AdminService {
         OrderItem item1 = new OrderItem()
         item1.sku = product.sku
         item1.quantity = 2
-        List<OrderItem> orderItems = new ArrayList<OrderItem>(){{ item1 }}
         uri("products", "reduction")
-        response = doSilentPost(orderItems)
+        response = doSilentPost([item1])
         Assert.assertTrue(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
         Assert.assertTrue(productRepository.findOne(product.sku).getAvailability() == 3)
 
@@ -302,7 +301,7 @@ class AdminService {
 
         // list order items
         uri("customers", customer.id, "orders", order.id, "orderItems")
-        orderItems = doGetList(OrderItem[].class)
+        List<OrderItem> orderItems = doGetList(OrderItem[].class)
         Assert.assertTrue(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
         Assert.assertTrue(orderItems.contains(orderItem))
 
