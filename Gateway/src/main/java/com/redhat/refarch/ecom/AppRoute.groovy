@@ -281,6 +281,7 @@ class AppRoute extends SpringRouteBuilder {
                     .to("amq:products.delete?transferException=true")
 
         rest("/products/reduction")
+                .consumes(MediaType.APPLICATION_JSON)
                 .post()
                     .description("reduce product inventory")
                     .param().name("orderItems").type(RestParamType.body)
