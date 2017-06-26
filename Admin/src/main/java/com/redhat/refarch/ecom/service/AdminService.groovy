@@ -180,6 +180,7 @@ class AdminService {
 
         // reduce product
         OrderItem item1 = new OrderItem()
+        item1.id = null
         item1.sku = product.sku
         item1.quantity = 2
         uri("products", "reduction")
