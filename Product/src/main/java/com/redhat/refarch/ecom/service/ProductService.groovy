@@ -40,7 +40,7 @@ class ProductService {
     void reduceInventory(OrderItem[] orderItems) {
 
         for (OrderItem orderItem : orderItems) {
-
+            println "processing orderItem ${orderItem.toString()}"
             Product product = getProduct(orderItem.sku)
 
             if (product == null) {
@@ -54,6 +54,7 @@ class ProductService {
                 productRepository.save(product)
             }
         }
+        println "done, returning"
     }
 
     Product addKeywordsToProduct(String sku, String[] keywords) {
