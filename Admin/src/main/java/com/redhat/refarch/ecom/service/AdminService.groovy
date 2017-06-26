@@ -179,10 +179,14 @@ class AdminService {
         Assert.assertTrue(product.getKeywords().containsAll(["Electronics", "TV"]))
 
         // reduce product
-        uri("products", product.sku, "reduce", "1")
-        response = doSilentGet()
+        OrderItem item1 = new OrderItem()
+        item1.sku = product.sku
+        item1.sku = 2
+        List<OrderItem> orderItems = new ArrayList<OrderItem>(){{ item1 }}
+        uri("products", "reduction")
+        response = doSilentPost(orderItems)
         Assert.assertTrue(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-        Assert.assertTrue(productRepository.findOne(product.sku).getAvailability() == 4)
+        Assert.assertTrue(productRepository.findOne(product.sku).getAvailability() == 3)
 
         // delete product
         uri("products", product.sku)
@@ -298,7 +302,7 @@ class AdminService {
 
         // list order items
         uri("customers", customer.id, "orders", order.id, "orderItems")
-        List<OrderItem> orderItems = doGetList(OrderItem[].class)
+        orderItems = doGetList(OrderItem[].class)
         Assert.assertTrue(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
         Assert.assertTrue(orderItems.contains(orderItem))
 

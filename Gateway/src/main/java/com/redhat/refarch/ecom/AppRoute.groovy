@@ -280,13 +280,11 @@ class AppRoute extends SpringRouteBuilder {
                     .responseMessage().code(200).message("product deleted").endResponseMessage()
                     .to("amq:products.delete?transferException=true")
 
-        rest("/products/{sku}/reduce/{quantity}")
-                .get()
+        rest("/products/reduction")
+                .post()
                     .description("reduce product inventory")
-                    .param().name("sku").type(RestParamType.path)
-                    .description("product to reduce").endParam()
-                    .param().name("quantity").type(RestParamType.path)
-                    .description("reduction quantity").endParam()
+                    .param().name("orderItems").type(RestParamType.body)
+                    .description("orderItems to reduce").endParam()
                     .responseMessage().code(200).message("product inventory reduced").endResponseMessage()
                     .to("amq:products.reduce?transferException=true")
 

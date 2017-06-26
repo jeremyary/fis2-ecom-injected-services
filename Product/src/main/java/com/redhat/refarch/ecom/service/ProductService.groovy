@@ -1,6 +1,7 @@
 package com.redhat.refarch.ecom.service
 
 import com.redhat.refarch.ecom.model.Error
+import com.redhat.refarch.ecom.model.OrderItem
 import com.redhat.refarch.ecom.model.Product
 import com.redhat.refarch.ecom.repository.ProductRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,18 +37,22 @@ class ProductService {
         productRepository.delete(sku)
     }
 
-    void reduceInventory(String sku, Integer quantity) {
+    void reduceInventory(List<OrderItem> orderItems) {
 
-        Product product = getProduct(sku)
-        if (product == null) {
-            throw new Error(HttpURLConnection.HTTP_NOT_FOUND, "Product not found").asException()
-        }
-        if (quantity > product.getAvailability()) {
-            String message = "Insufficient availability for ${sku}"
-            throw new Error(HttpURLConnection.HTTP_CONFLICT, message).asException()
-        } else {
-            product.setAvailability(product.getAvailability() - quantity)
-            productRepository.save(product)
+        for (OrderItem orderItem : orderItems) {
+
+            Product product = getProduct(orderItem.sku)
+
+            if (product == null) {
+                throw new Error(HttpURLConnection.HTTP_NOT_FOUND, "Product not found").asException()
+            }
+            if (orderItem.quantity > product.getAvailability()) {
+                String message = "Insufficient availability for ${orderItem.sku}"
+                throw new Error(HttpURLConnection.HTTP_CONFLICT, message).asException()
+            } else {
+                product.setAvailability(product.getAvailability() - orderItem.quantity)
+                productRepository.save(product)
+            }
         }
     }
 
