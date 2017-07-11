@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component
 
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
-import javax.xml.soap.SOAPFault
 import java.util.logging.Logger
 
 @Component
