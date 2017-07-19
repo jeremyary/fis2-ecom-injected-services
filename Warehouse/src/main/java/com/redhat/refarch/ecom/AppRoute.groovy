@@ -33,6 +33,7 @@ class AppRoute extends SpringRouteBuilder {
 
         from("amq:warehouse.fulfill")
                 .unmarshal().json(JsonLibrary.Jackson, Result.class)
+                .delay().method(warehouseService, "computeDelay")
                 .bean(warehouseService, "fulfillOrder")
     }
 }
