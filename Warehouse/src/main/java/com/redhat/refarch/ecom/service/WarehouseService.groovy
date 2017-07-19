@@ -42,7 +42,7 @@ class WarehouseService {
         HttpClient client = new DefaultHttpClient()
 
         URIBuilder uriBuilder = new URIBuilder("http://gateway-service.ecom-services.svc.cluster.local:9091/customers/"
-                + result.getCustomerId() + "/orders")
+                + result.getCustomerId() + "/orders/" + result.orderNumber)
         HttpGet get = new HttpGet(uriBuilder.build())
         logInfo("Executing " + get)
         HttpResponse response = client.execute(get)
