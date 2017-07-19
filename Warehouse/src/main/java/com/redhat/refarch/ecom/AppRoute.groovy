@@ -31,7 +31,7 @@ class AppRoute extends SpringRouteBuilder {
     @Override
     void configure() throws Exception {
 
-        from("amq:warehouse.fulfill")
+        from("amq:topic:warehouse.fulfill")
                 .unmarshal().json(JsonLibrary.Jackson, Result.class)
                 .delay().method(warehouseService, "computeDelay")
                 .bean(warehouseService, "fulfillOrder")
