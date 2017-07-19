@@ -18,6 +18,7 @@ package com.redhat.refarch.ecom.service
 import com.redhat.refarch.ecom.model.Result
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
+import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPatch
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.entity.ContentType
@@ -39,18 +40,27 @@ class WarehouseService {
     void fulfillOrder(Result result) throws Exception {
 
         HttpClient client = new DefaultHttpClient()
-        JSONObject jsonObject = new JSONObject()
-        jsonObject.put("status", "Shipped")
 
         URIBuilder uriBuilder = new URIBuilder("http://gateway-service.ecom-services.svc.cluster.local:9091/customers/"
+                + result.getCustomerId() + "/orders")
+        HttpGet get = new HttpGet(uriBuilder.build())
+        logInfo("Executing " + get)
+        HttpResponse response = client.execute(get)
+        String responseString = EntityUtils.toString(response.getEntity())
+        logInfo("Got response " + responseString)
+
+        JSONObject jsonObject = new JSONObject(responseString)
+        jsonObject.put("status", "Shipped")
+
+        uriBuilder = new URIBuilder("http://gateway-service.ecom-services.svc.cluster.local:9091/customers/"
                 + result.getCustomerId() + "/orders")
         HttpPatch patch = new HttpPatch(uriBuilder.build())
         patch.setEntity(new StringEntity(jsonObject.toString(), ContentType.APPLICATION_JSON))
         logInfo("Waiting 5 seconds to simulate a symbolic warehouse processing delay...")
         Thread.sleep(5000)
         logInfo("Executing " + patch)
-        HttpResponse response = client.execute(patch)
-        String responseString = EntityUtils.toString(response.getEntity())
+        response = client.execute(patch)
+        responseString = EntityUtils.toString(response.getEntity())
         logInfo("Got response " + responseString)
     }
 
