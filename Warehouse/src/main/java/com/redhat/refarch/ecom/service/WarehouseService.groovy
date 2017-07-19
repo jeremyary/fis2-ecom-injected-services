@@ -42,8 +42,8 @@ class WarehouseService {
         JSONObject jsonObject = new JSONObject()
         jsonObject.put("status", "Shipped")
 
-        URIBuilder uriBuilder = new URIBuilder("http://gateway-service.ecom-services.svc.cluster.local:9091/customers/" + result.getCustomerId()
-                + "/orders/" + result.getOrderNumber())
+        URIBuilder uriBuilder = new URIBuilder("http://gateway-service.ecom-services.svc.cluster.local:9091/customers/"
+                + result.getCustomerId() + "/orders")
         HttpPatch patch = new HttpPatch(uriBuilder.build())
         patch.setEntity(new StringEntity(jsonObject.toString(), ContentType.APPLICATION_JSON))
         logInfo("Waiting 5 seconds to simulate a symbolic warehouse processing delay...")
@@ -55,7 +55,7 @@ class WarehouseService {
     }
 
     static Integer computeDelay() {
-        return ThreadLocalRandom.current().nextInt(30, 60 + 1)
+        return ThreadLocalRandom.current().nextInt(30000, 60000 + 1)
     }
 
     private void logInfo(String message) {
