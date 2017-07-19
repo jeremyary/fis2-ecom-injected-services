@@ -42,7 +42,7 @@ class WarehouseService {
         JSONObject jsonObject = new JSONObject()
         jsonObject.put("status", "Shipped")
 
-        URIBuilder uriBuilder = new URIBuilder("http://gateway-service:9091/customers/" + result.getCustomerId()
+        URIBuilder uriBuilder = new URIBuilder("http://gateway-service.ecom-services.svc.cluster.local:9091/customers/" + result.getCustomerId()
                 + "/orders/" + result.getOrderNumber())
         HttpPatch patch = new HttpPatch(uriBuilder.build())
         patch.setEntity(new StringEntity(jsonObject.toString(), ContentType.APPLICATION_JSON))
